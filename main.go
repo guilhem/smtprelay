@@ -196,6 +196,7 @@ func mailHandler(peer smtpd.Peer, env smtpd.Envelope) error {
 
 		err := SendMail(
 			remote,
+			peer.HeloName,
 			env.Sender,
 			env.Recipients,
 			env.Data,

@@ -320,9 +320,13 @@ var testHookStartTLS func(*tls.Config) // nil, except for tests
 // attachments (see the mime/multipart package), or other mail
 // functionality. Higher-level packages exist outside of the standard
 // library.
-func SendMail(r *Remote, from string, to []string, msg []byte) error {
+func SendMail(r *Remote, sender string, from string, to []string, msg []byte) error {
 	if r.Sender != "" {
 		from = r.Sender
+	}
+
+	if sender == "" {
+		sender = r.Hostname
 	}
 
 	if err := validateLine(from); err != nil {
@@ -345,7 +349,7 @@ func SendMail(r *Remote, from string, to []string, msg []byte) error {
 			return err
 		}
 		defer conn.Close()
-		c, err = NewClient(conn, r.Hostname)
+		c, err = NewClient(conn, sender)
 		if err != nil {
 			return err
 		}
